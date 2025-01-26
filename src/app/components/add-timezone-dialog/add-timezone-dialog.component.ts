@@ -36,7 +36,6 @@ export class AddTimezoneDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AddTimezoneDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private timezoneService: TimezoneService
   ) {}
 
   ngOnInit(): void {

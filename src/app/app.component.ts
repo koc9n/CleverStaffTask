@@ -4,7 +4,6 @@ import { AddTimezoneDialogComponent } from './components/add-timezone-dialog/add
 import { ClockTableComponent } from './components/clock-table/clock-table.component';
 import { TimezoneCommunicationService } from './services/timezone-communication.service';
 import { MatButton } from '@angular/material/button';
-import { TimezoneService } from './services/timezone.service';
 
 @Component({
   selector: 'app-root',
