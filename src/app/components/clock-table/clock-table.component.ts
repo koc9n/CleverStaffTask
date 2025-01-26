@@ -30,7 +30,7 @@ import { MatDialog } from '@angular/material/dialog';
     MatHeaderRowDef,
     MatRowDef
   ],
-  styleUrls: ['./clock-table.component.scss']
+  styleUrls: ['./clock-table.component.css']
 })
 export class ClockTableComponent implements OnInit, OnDestroy {
   private timezonesSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);

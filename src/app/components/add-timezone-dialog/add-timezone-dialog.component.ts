@@ -27,7 +27,7 @@ import moment from 'moment-timezone';
     MatDialogContent,
     NgForOf
   ],
-  styleUrls: ['./add-timezone-dialog.component.scss']
+  styleUrls: ['./add-timezone-dialog.component.css']
 })
 export class AddTimezoneDialogComponent implements OnInit {
   timezones: string[] = [];

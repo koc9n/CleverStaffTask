@@ -12,7 +12,7 @@ import { MatButton } from '@angular/material/button';
     MatButton,
     ClockTableComponent
   ],
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   constructor(public dialog: MatDialog,
