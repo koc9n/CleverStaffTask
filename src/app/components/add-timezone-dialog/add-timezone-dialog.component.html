@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Add Timezone</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Timezone</mat-label>
+    <mat-select [(value)]="selectedTimezone">
+      <mat-option *ngFor="let timezone of timezones" [value]="timezone">
+        {{timezone}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button (click)="onAdd()">Add</button>
+</div>
