@@ -1,16 +1,27 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { ApplicationRef, NgModule } from '@angular/core';
+import { ApplicationRef, DoBootstrap, importProvidersFrom, NgModule, provideZoneChangeDetection } from '@angular/core';
 import { AppComponent } from './app.component';
 import { provideHttpClient } from '@angular/common/http';
 import { MatDialogModule } from '@angular/material/dialog';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideRouter } from '@angular/router';
+import { routes } from './app.routes';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [],
   imports: [AppComponent, BrowserModule, MatDialogModule],
-  providers: [provideAnimations(), provideHttpClient()]
+  providers: [
+    provideZoneChangeDetection({eventCoalescing: true}),
+    provideRouter(routes),
+    provideAnimationsAsync(),
+    provideHttpClient(),
+    importProvidersFrom(MatInputModule, MatFormFieldModule, MatTableModule)
+  ]
 })
-export class MyApplicationModule {
+export class MyApplicationModule implements DoBootstrap {
   constructor(private appRef: ApplicationRef) {
   }
 

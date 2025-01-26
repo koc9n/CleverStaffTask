@@ -7,9 +7,10 @@ import { TimezoneService } from '../../services/timezone.service';
 import { TimezoneCommunicationService } from '../../services/timezone-communication.service';
 import { TimeSyncService } from '../../services/time-sync.service';
 import { MatDialog } from '@angular/material/dialog';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatTableModule } from '@angular/material/table';
+import { MatCell, MatColumnDef, MatHeaderCell, MatHeaderRow, MatRow, MatTable } from '@angular/material/table';
+import { TickingDateCellComponent } from '../ticking-date-cell/ticking-date-cell.component';
 
 describe('ClockTableComponent', () => {
   let component: ClockTableComponent;
@@ -17,8 +18,16 @@ describe('ClockTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ClockTableComponent, HttpClientModule, MatTableModule],
-      providers: [TimezoneService, TimezoneCommunicationService, TimeSyncService, MatDialog, HttpClient],
+      imports: [
+        ClockTableComponent,
+        MatTable,
+        MatHeaderCell,
+        MatCell,
+        MatColumnDef,
+        MatHeaderRow,
+        MatRow,
+        TickingDateCellComponent],
+      providers: [TimezoneService, TimezoneCommunicationService, TimeSyncService, MatDialog, provideHttpClient()],
       schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
@@ -46,7 +55,6 @@ describe('ClockTableComponent', () => {
   it('should handle error when getTimezoneByIP fails', () => {
     const timezoneServiceSpy = spyOn(component['timezoneService'], 'getTimezoneByIP').and.returnValue(throwError(() => new Error('Error')));
     const dialogSpy = spyOn(component['dialog'], 'open');
-    const clearIntervalSpy = spyOn(window, 'clearInterval');
 
     component.loadDefaultTimezone();
 
@@ -82,7 +90,6 @@ describe('ClockTableComponent', () => {
 
   it('should handle error when getTimeByTimezone fails', () => {
     const dialogSpy = spyOn(component['dialog'], 'open').and.stub();
-    const clearIntervalSpy = spyOn(window, 'clearInterval');
     spyOn(component['timezoneService'], 'getTimeByTimezone').and.returnValue(throwError(() => new Error('Error')));
 
     component.addTimezone('Invalid/Timezone');
