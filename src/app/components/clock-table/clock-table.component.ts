@@ -25,10 +25,10 @@ import { MatDialog } from '@angular/material/dialog';
     MatColumnDef,
     MatHeaderRow,
     MatRow,
-    MatCellDef,
-    MatHeaderCellDef,
     MatHeaderRowDef,
-    MatRowDef
+    MatRowDef,
+    MatCellDef,
+    MatHeaderCellDef
   ],
   styleUrls: ['./clock-table.component.css']
 })
@@ -47,7 +47,7 @@ export class ClockTableComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadDefaultTimezone();
-    this.updateTimeIntervalId = setInterval(() => this.updateTimes, 1000); // Refresh every second
+    this.updateTimeIntervalId = setInterval(() => this.updateTimes(), 1000); // Refresh every second
 
     this.timezoneCommunicationService.addTimezone$.subscribe(timezone => {
       this.addTimezone(timezone);
