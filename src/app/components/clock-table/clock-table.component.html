@@ -1,4 +1,4 @@
-<table mat-table [dataSource]="timezones$" class="mat-elevation-z8">
+<table [dataSource]="timezones()" class="mat-elevation-z8" mat-table>
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef> Timezone </th>
     <td mat-cell *matCellDef="let element"> {{element.name}} </td>
@@ -11,12 +11,16 @@
 
   <ng-container matColumnDef="time">
     <th mat-header-cell *matHeaderCellDef> Time </th>
-    <td mat-cell *matCellDef="let element"> {{element.time}} </td>
+    <td *matCellDef="let element" mat-cell>
+      <app-ticking-date-cell [format]="'HH:mm:ss'" [timezoneName]="element.name"/>
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="date">
     <th mat-header-cell *matHeaderCellDef> Date </th>
-    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+    <td *matCellDef="let element" mat-cell>
+      <app-ticking-date-cell [format]="'YYYY-MM-DD'" [timezoneName]="element.name"/>
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="daylightSaving">

@@ -37,3 +37,10 @@ It requires to register and get an API key to use it.
 Register as Individual it gives free 1000 requests to API , should be enough for test
 
 After registering change value of apiKey in the environment.ts file to one from website.
+
+## To Test where DST is enabled:
+
+Since I used different API not sure it returns correctly data of dst.
+Use the following timezone(dst is enabled in this timezone):
+
+- Pacific/Easter

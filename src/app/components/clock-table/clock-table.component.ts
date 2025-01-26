@@ -1,19 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { TimezoneService } from '../../services/timezone.service';
 import { TimezoneCommunicationService } from '../../services/timezone-communication.service';
 import moment from 'moment-timezone';
-import { BehaviorSubject, Observable } from 'rxjs';
-import {
-  MatCell,
-  MatCellDef,
-  MatColumnDef,
-  MatHeaderCell, MatHeaderCellDef,
-  MatHeaderRow, MatHeaderRowDef,
-  MatRow, MatRowDef,
-  MatTable
-} from '@angular/material/table';
+import { MatCell, MatColumnDef, MatHeaderCell, MatHeaderRow, MatRow, MatTable } from '@angular/material/table';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { TickingDateCellComponent } from '../ticking-date-cell/ticking-date-cell.component';
+import { TimeSyncService } from '../../services/time-sync.service';
 
 @Component({
   selector: 'app-clock-table',
@@ -25,31 +18,21 @@ import { MatDialog } from '@angular/material/dialog';
     MatColumnDef,
     MatHeaderRow,
     MatRow,
-    MatHeaderRowDef,
-    MatRowDef,
-    MatCellDef,
-    MatHeaderCellDef
+    TickingDateCellComponent
   ],
   styleUrls: ['./clock-table.component.css']
 })
 export class ClockTableComponent implements OnInit, OnDestroy {
-  private timezonesSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  private updateTimeIntervalId: any;
-  timezones$: Observable<any[]> = this.timezonesSubject.asObservable();
+  timezones: WritableSignal<any[]> = signal([]);
   displayedColumns: string[] = ['name', 'abbreviation', 'time', 'date', 'daylightSaving'];
-
-
-  constructor(private timezoneService: TimezoneService,
-              private timezoneCommunicationService: TimezoneCommunicationService,
-              private dialog: MatDialog
-  ) {
-  }
+  timezoneService = inject(TimezoneService);
+  timezoneCommunicationService = inject(TimezoneCommunicationService);
+  timeSync = inject(TimeSyncService);
+  private dialog = inject(MatDialog);
 
   ngOnInit(): void {
     this.loadDefaultTimezone();
-    this.updateTimeIntervalId = setInterval(() => this.updateTimes(), 1000); // Refresh every second
-
-    this.timezoneCommunicationService.addTimezone$.subscribe(timezone => {
+    this.timezoneCommunicationService.addTimezone$.subscribe((timezone: string) => {
       this.addTimezone(timezone);
     });
   }
@@ -60,11 +43,10 @@ export class ClockTableComponent implements OnInit, OnDestroy {
         const userTimezone = data.time_zone.name;
         this.timezoneCommunicationService.addTimezone(userTimezone);
       },
-      error: (err) => {
+      error: (_err) => {
         this.dialog.open(ErrorDialogComponent, {
           data: {message: 'Failed to load timezone by IP.'}
         });
-        clearInterval(this.updateTimeIntervalId);
       }
     });
   }
@@ -74,7 +56,7 @@ export class ClockTableComponent implements OnInit, OnDestroy {
       return `☑ ${data.dst_start.dateTimeBefore.split('T')[0]} -> ${data.dst_end.dateTimeBefore.split('T')[0]}`;
     }
 
-    if (this.timezonesSubject.getValue().some(tz => tz.name === timezone)) {
+    if (this.timezones().some(tz => tz.name === timezone)) {
       this.dialog.open(ErrorDialogComponent, {
         data: {message: 'The timezone is already added.'}
       });
@@ -86,33 +68,22 @@ export class ClockTableComponent implements OnInit, OnDestroy {
             name: data.timezone,
             abbreviation: timeZoneMoment.format('z'),
             offset: timeZoneMoment.format('Z'),
-            time: timeZoneMoment.format('HH:mm:ss'),
-            date: timeZoneMoment.format('DD-MM-YYYY'),
+            dateTime: data.date_time,
             daylightSaving: timeZoneMoment.isDST() ? generateDateRangeString(data) : '✖'
           };
-          this.timezonesSubject.next([...this.timezonesSubject.getValue(), newTimezone]);
+          this.timezones.set([...this.timezones(), newTimezone]);
+          this.timeSync.startTimer();
         },
-        error: (err) => {
+        error: (_err) => {
           this.dialog.open(ErrorDialogComponent, {
             data: {message: 'Failed to load time by timezone.'}
           });
-          clearInterval(this.updateTimeIntervalId);
         }
       });
     }
   }
 
-  updateTimes(): void {
-    const updatedTimezones = this.timezonesSubject.getValue().map(tz => ({
-      ...tz,
-      time: moment().tz(tz.name).format('HH:mm:ss'),
-      date: moment().tz(tz.name).format('DD-MM-YYYY')
-    }));
-
-    this.timezonesSubject.next(updatedTimezones);
-  }
-
   ngOnDestroy(): void {
-    clearInterval(this.updateTimeIntervalId);
+    //
   }
 }
