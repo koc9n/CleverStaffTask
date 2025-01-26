@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, untracked } from '@angular/core';
 import { MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatButton } from '@angular/material/button';
-import { NgForOf } from '@angular/common';
 import moment from 'moment-timezone';
 
 @Component({
@@ -17,8 +16,7 @@ import moment from 'moment-timezone';
     MatDialogActions,
     MatButton,
     MatDialogTitle,
-    MatDialogContent,
-    NgForOf
+    MatDialogContent
   ],
   styleUrls: ['./add-timezone-dialog.component.css']
 })
@@ -41,4 +39,6 @@ export class AddTimezoneDialogComponent implements OnInit {
   onCancel(): void {
     this.dialogRef.close();
   }
+
+  protected readonly untracked = untracked;
 }

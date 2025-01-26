@@ -3,9 +3,9 @@
   <mat-form-field>
     <mat-label>Timezone</mat-label>
     <mat-select [(value)]="selectedTimezone">
-      <mat-option *ngFor="let timezone of timezones" [value]="timezone">
-        {{timezone}}
-      </mat-option>
+      @for(timezone of timezones; track timezone) {
+        <mat-option value="{{timezone}}">{{timezone}}</mat-option>
+      }
     </mat-select>
   </mat-form-field>
 </div>
