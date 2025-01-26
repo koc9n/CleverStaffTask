@@ -2,7 +2,15 @@ import { Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@a
 import { TimezoneService } from '../../services/timezone.service';
 import { TimezoneCommunicationService } from '../../services/timezone-communication.service';
 import moment from 'moment-timezone';
-import { MatCell, MatColumnDef, MatHeaderCell, MatHeaderRow, MatRow, MatTable } from '@angular/material/table';
+import {
+  MatCell, MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow, MatHeaderRowDef,
+  MatRow, MatRowDef,
+  MatTable
+} from '@angular/material/table';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { TickingDateCellComponent } from '../ticking-date-cell/ticking-date-cell.component';
@@ -18,7 +26,11 @@ import { TimeSyncService } from '../../services/time-sync.service';
     MatColumnDef,
     MatHeaderRow,
     MatRow,
-    TickingDateCellComponent
+    TickingDateCellComponent,
+    MatHeaderCellDef,
+    MatCellDef,
+    MatRowDef,
+    MatHeaderRowDef
   ],
   styleUrls: ['./clock-table.component.css']
 })
