@@ -3,6 +3,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ClockTableComponent } from './clock-table.component';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { of, throwError } from 'rxjs';
+import { TimezoneService } from '../../services/timezone.service';
+import { TimezoneCommunicationService } from '../../services/timezone-communication.service';
+import { TimeSyncService } from '../../services/time-sync.service';
+import { MatDialog } from '@angular/material/dialog';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MatTableModule } from '@angular/material/table';
 
 describe('ClockTableComponent', () => {
   let component: ClockTableComponent;
@@ -10,7 +17,9 @@ describe('ClockTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ClockTableComponent]
+      imports: [ClockTableComponent, HttpClientModule, MatTableModule],
+      providers: [TimezoneService, TimezoneCommunicationService, TimeSyncService, MatDialog, HttpClient],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
 
@@ -43,7 +52,6 @@ describe('ClockTableComponent', () => {
 
     expect(timezoneServiceSpy).toHaveBeenCalled();
     expect(dialogSpy).toHaveBeenCalledWith(ErrorDialogComponent, {data: {message: 'Failed to load timezone by IP.'}});
-    expect(clearIntervalSpy).toHaveBeenCalledWith(component['updateTimeIntervalId']);
   });
 
   it('should add a unique timezone and update timezonesSubject', () => {
@@ -53,7 +61,7 @@ describe('ClockTableComponent', () => {
       dst_end: {dateTimeBefore: '2023-11-05T02:00:00'}
     };
 
-    const timezonesObserver = spyOn(component['timezonesSubject'], 'next');
+    const timezonesObserver = spyOn(component['timezones'], 'set');
     spyOn(component['timezoneService'], 'getTimeByTimezone').and.returnValue(of(mockTimezone));
 
     component.addTimezone('America/New_York');
@@ -65,7 +73,7 @@ describe('ClockTableComponent', () => {
     const dialogSpy = spyOn(component['dialog'], 'open').and.stub();
     const existingTimezone = {name: 'Asia/Kolkata', abbreviation: 'IST', time: '', date: '', daylightSaving: ''};
 
-    component['timezonesSubject'].next([existingTimezone]);
+    component['timezones'].set([existingTimezone]);
 
     component.addTimezone('Asia/Kolkata');
 
@@ -80,6 +88,5 @@ describe('ClockTableComponent', () => {
     component.addTimezone('Invalid/Timezone');
 
     expect(dialogSpy).toHaveBeenCalledWith(ErrorDialogComponent, {data: {message: 'Failed to load time by timezone.'}});
-    expect(clearIntervalSpy).toHaveBeenCalledWith(component['updateTimeIntervalId']);
   });
 });

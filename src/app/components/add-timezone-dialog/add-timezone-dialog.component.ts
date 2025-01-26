@@ -1,12 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import {
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-  MatDialogActions,
-  MatDialogTitle,
-  MatDialogContent
-} from '@angular/material/dialog';
-import { TimezoneService } from '../../services/timezone.service';
+import { Component, OnInit } from '@angular/core';
+import { MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatButton } from '@angular/material/button';
@@ -35,7 +28,6 @@ export class AddTimezoneDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddTimezoneDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
   ) {}
 
   ngOnInit(): void {

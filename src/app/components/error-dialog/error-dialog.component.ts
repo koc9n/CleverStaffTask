@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { MatButton } from '@angular/material/button';
 
@@ -33,7 +33,7 @@ import { MatButton } from '@angular/material/button';
   `]
 })
 export class ErrorDialogComponent {
-  constructor(private dialogRef: MatDialogRef<ErrorDialogComponent>) {}
+  dialogRef: MatDialogRef<ErrorDialogComponent> = inject(MatDialogRef);
 
   onClose(): void {
     this.dialogRef.close();

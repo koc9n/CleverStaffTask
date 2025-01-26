@@ -1,14 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ApplicationRef, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { MatDialogModule } from '@angular/material/dialog';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [],
-  imports: [AppComponent, BrowserModule, HttpClientModule, MatDialogModule, NoopAnimationsModule],
-  providers: []
+  imports: [AppComponent, BrowserModule, MatDialogModule],
+  providers: [provideAnimations(), provideHttpClient()]
 })
 export class MyApplicationModule {
   constructor(private appRef: ApplicationRef) {
