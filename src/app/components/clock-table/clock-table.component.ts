@@ -36,8 +36,6 @@ export class ClockTableComponent implements OnInit, OnDestroy {
     this.timezoneCommunicationService.addTimezone$.subscribe((timezone: string) => {
       this.addTimezone(timezone);
     });
-
-
   }
 
   loadDefaultTimezone(): void {
