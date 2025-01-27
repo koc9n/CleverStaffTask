@@ -9,7 +9,9 @@ import { TimeSyncService } from '../../services/time-sync.service';
 import { MatDialog } from '@angular/material/dialog';
 import { provideHttpClient } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatCell, MatColumnDef, MatHeaderCell, MatHeaderRow, MatRow, MatTable } from '@angular/material/table';
+import {
+  MatTableModule
+} from '@angular/material/table';
 import { TickingDateCellComponent } from '../ticking-date-cell/ticking-date-cell.component';
 
 describe('ClockTableComponent', () => {
@@ -19,13 +21,8 @@ describe('ClockTableComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
+        MatTableModule,
         ClockTableComponent,
-        MatTable,
-        MatHeaderCell,
-        MatCell,
-        MatColumnDef,
-        MatHeaderRow,
-        MatRow,
         TickingDateCellComponent],
       providers: [TimezoneService, TimezoneCommunicationService, TimeSyncService, MatDialog, provideHttpClient()],
       schemas: [NO_ERRORS_SCHEMA]

@@ -9,7 +9,7 @@ import {
   MatHeaderCellDef,
   MatHeaderRow, MatHeaderRowDef,
   MatRow, MatRowDef,
-  MatTable
+  MatTable, MatTableModule
 } from '@angular/material/table';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,17 +20,8 @@ import { TimeSyncService } from '../../services/time-sync.service';
   selector: 'app-clock-table',
   templateUrl: './clock-table.component.html',
   imports: [
-    MatTable,
-    MatHeaderCell,
-    MatCell,
-    MatColumnDef,
-    MatHeaderRow,
-    MatRow,
-    TickingDateCellComponent,
-    MatHeaderCellDef,
-    MatCellDef,
-    MatRowDef,
-    MatHeaderRowDef
+    MatTableModule,
+    TickingDateCellComponent
   ],
   styleUrls: ['./clock-table.component.css']
 })
