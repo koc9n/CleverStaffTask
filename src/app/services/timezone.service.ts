@@ -7,9 +7,9 @@ import { environment } from '../environments/environment';
   providedIn: 'root'
 })
 export class TimezoneService {
-  private apiUrl = 'https://api.ipgeolocation.io/timezone';
-  private ipApiUrl = 'https://api.ipgeolocation.io/ipgeo';
-  private apiKey = environment.apiKey;
+  readonly apiUrl = 'https://api.ipgeolocation.io/timezone';
+  readonly ipApiUrl = 'https://api.ipgeolocation.io/ipgeo';
+  readonly apiKey = environment.apiKey;
   http = inject(HttpClient)
 
   getTimeByTimezone(timezone: string): Observable<any> {
