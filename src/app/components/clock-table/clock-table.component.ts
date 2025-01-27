@@ -2,15 +2,7 @@ import { Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@a
 import { TimezoneService } from '../../services/timezone.service';
 import { TimezoneCommunicationService } from '../../services/timezone-communication.service';
 import moment from 'moment-timezone';
-import {
-  MatCell, MatCellDef,
-  MatColumnDef,
-  MatHeaderCell,
-  MatHeaderCellDef,
-  MatHeaderRow, MatHeaderRowDef,
-  MatRow, MatRowDef,
-  MatTable, MatTableModule
-} from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { TickingDateCellComponent } from '../ticking-date-cell/ticking-date-cell.component';
@@ -34,10 +26,18 @@ export class ClockTableComponent implements OnInit, OnDestroy {
   private dialog = inject(MatDialog);
 
   ngOnInit(): void {
-    this.loadDefaultTimezone();
+    const storedTimezones = sessionStorage.getItem('timezones');
+    if (storedTimezones && storedTimezones.length > 0) {
+      this.timezones.set(JSON.parse(storedTimezones));
+    } else {
+      this.loadDefaultTimezone();
+    }
+
     this.timezoneCommunicationService.addTimezone$.subscribe((timezone: string) => {
       this.addTimezone(timezone);
     });
+
+
   }
 
   loadDefaultTimezone(): void {
@@ -75,6 +75,7 @@ export class ClockTableComponent implements OnInit, OnDestroy {
             daylightSaving: timeZoneMoment.isDST() ? generateDateRangeString(data) : '✖'
           };
           this.timezones.set([...this.timezones(), newTimezone]);
+          sessionStorage.setItem('timezones', JSON.stringify(this.timezones()));
           this.timeSync.startTimer();
         },
         error: (_err) => {
